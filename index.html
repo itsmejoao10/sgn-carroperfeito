@@ -955,6 +955,12 @@
             justify-content: space-between;
             gap: 12px;
             box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.6);
+            transform: translateY(100%);
+            transition: transform 0.4s ease;
+        }
+
+        .sticky-bar.visible {
+            transform: translateY(0);
         }
 
         .sticky-info {
@@ -1097,8 +1103,7 @@
             </h1>
 
             <p class="hero-sub">
-                Aprenda o método usado por lojistas e consultores automotivos para fechar qualquer negociação pagando
-                menos. <strong>Mesmo que você não entenda de carro.</strong>
+                Descubra e aplique o método usado por consultores automotivos para fechar qualquer negociação pagando menos.
             </p>
 
             <div class="proof-box">
@@ -1604,6 +1609,23 @@
         }, { threshold: 0.12 });
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        /* Sticky bar — aparece após o bloco de preço entrar na tela */
+        const stickyBar = document.querySelector('.sticky-bar');
+        const pricingSection = document.getElementById('comprar');
+        let stickyUnlocked = false;
+
+        const stickyObserver = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting && !stickyUnlocked) {
+                    stickyUnlocked = true;
+                    stickyBar.classList.add('visible');
+                    stickyObserver.disconnect();
+                }
+            });
+        }, { threshold: 0.1 });
+
+        if (pricingSection) stickyObserver.observe(pricingSection);
     </script>
 
 </body>
